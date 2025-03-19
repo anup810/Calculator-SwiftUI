@@ -12,14 +12,19 @@ struct ButtonView: View {
     let foregroundColor: Color
     let backgroundColor: Color
     
-    var systemImage: String?{
-      let value = calculatorButton.rawValue
-        return value.contains("IMG") ? value.replacingOccurrences(of: "IMG", with: "") : nil
+    var systemImage: String? {
+        switch calculatorButton {
+        case .negative, .undo:
+            return calculatorButton.rawValue
+        default:
+            return nil
+        }
     }
-    var text: String?{
-        let value = calculatorButton.rawValue
-        return value.contains("IMG") ? nil : value
+
+    var text: String? {
+        return systemImage == nil ? calculatorButton.rawValue : nil
     }
+    
     let buttonDim : CGFloat = UIScreen.main.bounds.width / 5
     var body: some View {
         ZStack{

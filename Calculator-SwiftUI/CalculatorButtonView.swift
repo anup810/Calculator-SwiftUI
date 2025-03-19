@@ -27,7 +27,7 @@ struct CalculatorButtonView: View {
             CalculatorButtonModel(calculatorButton: .four),
             CalculatorButtonModel(calculatorButton: .five),
             CalculatorButtonModel(calculatorButton: .six),
-            CalculatorButtonModel(calculatorButton: .divide, color: foregroundRIghtButtonsColor),
+            CalculatorButtonModel(calculatorButton: .subtract, color: foregroundRIghtButtonsColor),
                                         ]),
         RowOfCalculatorButtonModel(row: [
             CalculatorButtonModel(calculatorButton: .one),
@@ -51,6 +51,7 @@ struct CalculatorButtonView: View {
                     ForEach(rowOfCalculatorButtonModel.row){calculatorButtonModel in
                         Button {
                             print("Button Pressed")
+                            buttonPressed(calcButton: calculatorButtonModel.calculatorButton)
                         } label: {
                             ButtonView(
                                 calculatorButton: calculatorButtonModel.calculatorButton,
@@ -69,6 +70,63 @@ struct CalculatorButtonView: View {
         .background(secondaryBackgroundColor
             .clipShape(.rect(cornerRadius: 20))
         )
+    }
+    func buttonPressed(calcButton: CalculatorButton){
+
+        switch calcButton{
+        case .clear:
+            currentComputation = ""
+            mainResult = "0"
+        case .equal, .negative:
+            if !currentComputation.isEmpty{
+                if !lastCharacterIsAnOperator(str: currentComputation){
+                    let sign = calcButton == .negative ? -1.0 : 1.0
+                    mainResult = formatResult(value: sign * calculateResults())
+                    
+                    if calcButton == .negative {
+                        currentComputation = mainResult
+                    }
+                }
+            }
+        case .decimal:
+            print("Decimal")
+        case .percent:
+            if lastCharacterIsDigit(str: currentComputation){
+                appendToCurrentComputation(calcButton: calcButton)
+            }
+            
+        case .undo:
+            currentComputation = String(currentComputation.dropLast())
+            
+        case .add,.subtract,.divide,.multiply:
+            if lastCharacterIsDigitOrPercent(str: currentComputation){
+                appendToCurrentComputation(calcButton: calcButton)
+            }
+           
+        default:
+            appendToCurrentComputation(calcButton: calcButton)
+
+
+        }
+        
+    }
+    func appendToCurrentComputation(calcButton: CalculatorButton){
+        currentComputation += calcButton.rawValue
+    }
+    //implement computation
+    func calculateResults() -> Double{
+        let visibleWorkings: String = currentComputation
+        var workings = visibleWorkings.replacingOccurrences(of: "%", with: "*0.01")
+        workings = workings.replacingOccurrences(of: multiplySymbol, with: "*")
+        workings = workings.replacingOccurrences(of: divisionSymbol, with: "/")
+        
+        if getLastChar(str: visibleWorkings) == "."{
+            workings += "0"
+        }
+        let expression = NSExpression(format: workings)
+        let expressionvalue = expression.expressionValue(with: nil, context: nil) as!
+        Double
+        return expressionvalue
     }
 }
 
