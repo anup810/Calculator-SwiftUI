@@ -89,7 +89,31 @@ struct CalculatorButtonView: View {
                 }
             }
         case .decimal:
-            print("Decimal")
+
+            if currentComputation.isEmpty {
+                currentComputation = "0."
+                return
+            }
+
+            let lastChar = getLastChar(str: currentComputation)
+
+            //  Allow decimal after an operator (+, -, *, /)
+            if lastCharacterIsAnOperator(str: currentComputation) {
+                currentComputation += "0."
+                return
+            }
+
+            // Get the last number after an operator
+            let lastNumber = currentComputation.split(whereSeparator: { "+-*/".contains($0) }).last ?? ""
+
+            //  Prevent multiple decimals in the same number
+            if lastNumber.contains(".") {
+                return  // Do nothing if the last number already has a decimal
+            }
+
+            // Otherwise, append a decimal
+            currentComputation += "."
+
         case .percent:
             if lastCharacterIsDigit(str: currentComputation){
                 appendToCurrentComputation(calcButton: calcButton)
