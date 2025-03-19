@@ -56,4 +56,4 @@ Calculator-SwiftUI/
 
 ## 🎨 Design Credit
 
-This app's design is inspired by [this Dribbble shot](https://dribbble.com/shots/link-to-dribbble-shot).
+This app's design is inspired by [this Dribbble shot](https://dribbble.com/shots/14709020-Calculator).
