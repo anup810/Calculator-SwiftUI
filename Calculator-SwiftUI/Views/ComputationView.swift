@@ -17,6 +17,7 @@ struct ComputationView: View {
                 Text(currentComputation)
                     .foregroundStyle(foregroundDigitColor)
                     .lineLimit(1)
+                    .font(UIDevice.isPad ? .largeTitle : .body)
             }
             .minimumScaleFactor(0.1)
             HStack {

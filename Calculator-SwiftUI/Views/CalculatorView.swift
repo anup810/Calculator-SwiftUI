@@ -11,10 +11,9 @@ struct CalculatorView: View {
     @State var lightMode: Bool = true
     @State var currentComputation: String = ""
     @State var mainResult: String = "0"
+
     var body: some View {
-        ZStack {
-            primaryBackgroundColor
-                .ignoresSafeArea()
+        GeometryReader { geo in
             VStack {
                 SunMoonView(lightMode: lightMode)
                     .onTapGesture {
@@ -24,18 +23,22 @@ struct CalculatorView: View {
                     }
                 Spacer()
                 ComputationView(currentComputation: currentComputation, mainResult: mainResult)
+                    .padding(.horizontal, UIDevice.isPad ? geo.size.width * 0.1 : 0)
                 Spacer()
-                CalculatorButtonView(currentComputation: $currentComputation, mainResult: $mainResult)
-
+                CalculatorButtonView(
+                    currentComputation: $currentComputation,
+                    mainResult: $mainResult,
+                    width: geo.size.width
+                )
             }
             .padding()
         }
-        .environment(\.colorScheme,
-                      lightMode ? .light : .dark
-        )
+        .environment(\.colorScheme, lightMode ? .light : .dark)
     }
 }
 
+
 #Preview {
     CalculatorView()
+        
 }

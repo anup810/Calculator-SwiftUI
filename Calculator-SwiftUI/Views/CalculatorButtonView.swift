@@ -10,6 +10,7 @@ import SwiftUI
 struct CalculatorButtonView: View {
     @Binding var currentComputation: String
     @Binding var mainResult: String
+    let width: CGFloat
     let buttonData : [RowOfCalculatorButtonModel] = [
         RowOfCalculatorButtonModel(row: [
             CalculatorButtonModel(calculatorButton: .clear, color: foregroundTopButtonsColor),
@@ -56,7 +57,7 @@ struct CalculatorButtonView: View {
                             ButtonView(
                                 calculatorButton: calculatorButtonModel.calculatorButton,
                                 foregroundColor: calculatorButtonModel.color,
-                                backgroundColor: buttonBackgroundColor
+                                backgroundColor: buttonBackgroundColor, width: width
                             )
                         }
    
@@ -68,7 +69,7 @@ struct CalculatorButtonView: View {
         }
         .padding()
         .background(secondaryBackgroundColor
-            .clipShape(.rect(cornerRadius: 20))
+            .clipShape(.rect(cornerRadius: UIDevice.isPad ? 20 : 20))
         )
     }
     func buttonPressed(calcButton: CalculatorButton){
@@ -155,5 +156,5 @@ struct CalculatorButtonView: View {
 }
 
 #Preview {
-    CalculatorButtonView(currentComputation: .constant("5+1"), mainResult: .constant("6"))
+    CalculatorButtonView(currentComputation: .constant("5+1"), mainResult: .constant("6"), width: 375)
 }
